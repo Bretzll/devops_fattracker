@@ -26,7 +26,7 @@ pipeline{
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    def format = "MM-dd-yyyy'
+                    def format = "MM-dd-yyyy"
                     def date_nais = new SimpleDateFormat(format).parse(birth)
                     def poids = "${params.POIDS}"
                     float poids_int = poids as Float
