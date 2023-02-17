@@ -39,6 +39,7 @@ pipeline{
                     imc = poids_float / taille_float**2
                     
                     //Début du calcul du besoin calorique 
+                    def val_act = 0
                     
                     if (act == 'Sédentaire')    {
                         val_act = 1.375
