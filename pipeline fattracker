@@ -64,7 +64,7 @@ pipeline{
                     }   else if (sexe == 'Femme' and int(age) < 60 or imc < 30)   {
                         calcul = ((9.74 * int(poids)) + (172,9 * int(taille)) - (4.737 * int(age)) + 667.51) * act
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
-                    }   else if (sexe == 'Homme' and int(age > 60 OR imc > 30)  {
+                    }   else if (sexe == 'Homme' and int(age) > 60 OR imc > 30)  {
                         calcul = (1.083 * int(poids) ** 0,48 * int(taille) ** 0.5 * int(age)**-0.13) * (10000 / 4.1855)
                     }   else    {
                         calcul = (0.963 * int(poids) ** 0,48 * int(taille) ** 0.5 * int(age)**-0.13) * (10000 / 4.1855)
