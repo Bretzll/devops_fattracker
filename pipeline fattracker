@@ -29,15 +29,15 @@ pipeline{
                     def age = "${params.AGE}"
                     int age_int = age as Integer
                     def poids = "${params.POIDS}"
-                    poids_float = Float.valueOf(poids)
+                    poids_float = Double.valueOf(poids)
                     def taille = "${params.TAILLE}"
-                    taille_float = Float.valueOf(taille)
+                    taille_float = Double.valueOf(taille)
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
                     //Calcul de l'IMC
                     
-                    imc = poids_float / Math.pow(taille_float,2)
+                    imc = poids_float / (taille_float*taille_float)
                     
                     //Début du calcul du besoin calorique 
                     def val_act = 0
@@ -52,11 +52,8 @@ pipeline{
                         val_act = 1.82
                     }
                     
-                    bl_ps = Math.pow(poids_float,0.48)
-                    bl_tl = Math.pow(taille_float,0.5)
-                    bl_age = Math.pow(age_int,-0.13)
-                    
                     // Formule de Harris revue par Roza et Shizgall
+                    
                     def calcul = 0           
                     if (sexe == 'Homme' && age_int < 60 || imc < 30)    {
                         calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * act 
