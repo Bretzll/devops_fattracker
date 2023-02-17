@@ -1,10 +1,32 @@
 pipeline {
     agent any
+    parameters {
+        string(name: 'NOM', description: 'Entrez votre nom')
+        string(name: 'PRENOM', description: 'Entrez votre prénom')
+        string(name: 'AGE', description: 'Entrez votre âge')
+        choice(name: 'GENDER', choices: ['Homme', 'Femme', 'Autre'], description: 'Choisir votre genre')
+        string(name: 'BIRTH', description: 'Entrez votre date de naissance')
+    }
     
     stages {
         stage('Hello') {
             steps {
                 echo "Hello world"
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Test"
+            }
+        }
+        stage('Build') {
+            steps {
+                echo "Build"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploy"
             }
         }
     }
