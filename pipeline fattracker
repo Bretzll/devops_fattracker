@@ -1,5 +1,4 @@
 pipeline{
-    import datetime
     agent any
     parameters {
         string(name: 'NOM', description: 'Entrez votre nom')
