@@ -25,9 +25,9 @@ pipeline{
                     
                     def nom = "${params.NOM}" //string
                     def prenom = "${params.PRENOM}" //string
-                    def age = "${params.BIRTH}" //string
-                    def poids = "${params.POIDS}" // string
-                    def taille = "${params.TAILLE}" //string
+                    def age = "${params.BIRTH}".toInteger() //string
+                    def poids = "${params.POIDS}".toFloat() // string
+                    def taille = "${params.TAILLE}".toFloat() //string
                     def sexe = "${params.SEXE}" // string
                     def act = "${params.ACTIVITE}"
 
@@ -49,7 +49,7 @@ pipeline{
                     
                     // Formule de Harris revue par Roza et Shizgall
                                        
-                  /*  if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
+                    if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
                         calcul = ((13.707 * poids_) + (492.3 * taille) - (6.673 * age) + 77.607) * act 
                     }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
                         calcul = ((9.74 * poids) + (172.9 * taille) - (4.737 * age) + 667.51) * act
@@ -61,7 +61,7 @@ pipeline{
                     }   else    {
                         calcul = (0.963 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
                     }
-                    print ("Votre total calorique est de ", calcul," calories par jour.") */
+                    print ("Votre total calorique est de ", calcul," calories par jour.") 
                     
                 }
             }
