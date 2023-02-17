@@ -26,11 +26,11 @@ pipeline{
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    int age_int = birth as Integer
+                    int age_int = birth.toInteger()
                     def poids = "${params.POIDS}"
-                    float poids_float = poids as Float
+                    float poids_float = poids.toFloat()
                     def taille = "${params.TAILLE}"
-                    float taille_float = taille as Float
+                    float taille_float = taille.toFloat
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
