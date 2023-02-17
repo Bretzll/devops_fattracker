@@ -69,7 +69,7 @@ pipeline{
                     }   else    {
                         calcul = (0.963 * int(poids) ** 0.48 * int(taille) ** 0.5 * int(age)**-0.13) * (10000 / 4.1855)
                     }
-                    print ("Votre total calorique est de ", calcul," calories par jour."
+                    print ("Votre total calorique est de ", calcul," calories par jour.")
                     
                 }
             }
