@@ -30,7 +30,7 @@ pipeline{
                     def poids = "${params.POIDS}"
                     poids_float = Float.valueOf(poids)
                     def taille = "${params.TAILLE}"
-                    taille_float = Float.valueOf(birth)
+                    taille_float = Float.valueOf(taille)
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
