@@ -1,9 +1,9 @@
-//import java.text.SimpleDateFormat
+import java.text.SimpleDateFormat
 
 pipeline{
     agent any
     parameters {
-        string(name: 'NOM', description: 'Entrez votre nom')   
+        string(name: 'NOM', description: 'Entrez votre nom')
         string(name: 'PRENOM', description: 'Entrez votre prénom')
         string(name: 'BIRTH', description: 'Entrez votre âge')
         choice(name: 'SEXE', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
@@ -23,17 +23,20 @@ pipeline{
                 
                     //Définition des variables
                     
-                    def nom = "${params.NOM}" //string
-                    def prenom = "${params.PRENOM}" //string
-                    def age = "${params.BIRTH}".toInteger() //string
-                    def poids = "${params.POIDS}".toFloat() // string
-                    def taille = "${params.TAILLE}".toFloat() //string
-                    def sexe = "${params.SEXE}" // string
+                    def nom = "${params.NOM}"
+                    def prenom = "${params.PRENOM}"
+                    def birth = "${params.BIRTH}"
+                    age_int = Int.valueOf(birth)
+                    def poids = "${params.POIDS}"
+                    poids_float = Float.valueOf(poids)
+                    def taille = "${params.TAILLE}"
+                    taille_float = Float.valueOf(birth)
+                    def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
                     //Calcul de l'IMC
                     
-                    imc = poids / taille**2
+                    imc = poids_float / taille_float**2
                     
                     //Début du calcul du besoin calorique 
                     
@@ -49,19 +52,19 @@ pipeline{
                     
                     // Formule de Harris revue par Roza et Shizgall
                                        
-                    if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
-                        calcul = ((13.707 * poids_) + (492.3 * taille) - (6.673 * age) + 77.607) * act 
+                    if (sexe == 'Homme') and (age_int < 60) or (imc < 30)    {
+                        calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * act 
                     }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
-                        calcul = ((9.74 * poids) + (172.9 * taille) - (4.737 * age) + 667.51) * act
+                        calcul = ((9.74 * poids_float) + (172.9 * taille_float) - (4.737 * age_int) + 667.51) * act
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
-                    }   else if (sexe == 'Homme') and (age > 60) OR (imc > 30)  {
-                        calcul = (1.083 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
+                    }   else if (sexe == 'Homme') and (age_int > 60) OR (imc > 30)  {
+                        calcul = (1.083 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
                     }   else    {
-                        calcul = (0.963 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
+                        calcul = (0.963 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
                     }
-                    print ("Votre total calorique est de ", calcul," calories par jour.") 
+                    print ("Votre total calorique est de ", calcul," calories par jour.")
                     
                 }
             }
