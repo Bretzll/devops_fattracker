@@ -53,14 +53,14 @@ pipeline{
                     
                     // Formule de Harris revue par Roza et Shizgall
                     def calcul = 0           
-                    if (sexe == 'Homme') and (age_int < 60) or (imc < 30)    {
+                    if (sexe == 'Homme' && age_int < 60 || imc < 30)    {
                         calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * act 
-                    }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
+                    }   else if (sexe == 'Femme' && age < 60 || imc < 30)   {
                         calcul = ((9.74 * poids_float) + (172.9 * taille_float) - (4.737 * age_int) + 667.51) * act
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
-                    }   else if (sexe == 'Homme') and (age_int > 60) OR (imc > 30)  {
+                    }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
                         calcul = (1.083 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
                     }   else    {
                         calcul = (0.963 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
