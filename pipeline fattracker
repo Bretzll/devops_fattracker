@@ -29,10 +29,8 @@ pipeline{
                     int age_int = age as Integer
                     def poids = "${params.POIDS}"
                     poids_float = Float.valueOf(poids)
-                    def poids_float = poids as FLoat
                     def taille = "${params.TAILLE}"
                     taille_float = Float.valueOf(birth)
-                    def taille_float = taille as Float
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
