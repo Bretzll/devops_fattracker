@@ -6,7 +6,7 @@ pipeline{
         string(name: 'NOM', description: 'Entrez votre nom')
         string(name: 'PRENOM', description: 'Entrez votre prénom')
         string(name: 'BIRTH', description: 'Entrez votre âge')
-        choice(name: 'SEX', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
+        choice(name: 'SEXE', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
         string(name: 'POIDS', description: 'Entrez votre poids')
         string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
         choice(name: 'ACTIVITE', choices: ['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
@@ -26,12 +26,12 @@ pipeline{
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    int age_int = age as Integer
+                    int age_int = birth as Integer
                     def poids = "${params.POIDS}"
                     float poids_float = poids as Float
                     def taille = "${params.TAILLE}"
                     float taille_float = taille as Float
-                    def sexe = "${params.SEX}"
+                    def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
                     //Calcul de l'IMC
