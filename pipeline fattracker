@@ -52,7 +52,7 @@ pipeline{
                     }
                     
                     // Formule de Harris revue par Roza et Shizgall
-                                       
+                    def calcul = 0           
                     if (sexe == 'Homme') and (age_int < 60) or (imc < 30)    {
                         calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * act 
                     }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
