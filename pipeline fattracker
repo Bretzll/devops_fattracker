@@ -25,12 +25,12 @@ pipeline{
                     
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
-                    def age_int = "${params.BIRTH}".toInteger()
-                    //age_int = Int.valueOf(birth)
-                    def poids_float = "${params.POIDS}".toFloat()
-                    //poids_float = Float.valueOf(poids)
-                    def taille_float = "${params.TAILLE}".toFloat()
-                    //taille_float = Float.valueOf(birth)
+                    def age = "${params.BIRTH}"
+                    age_int = Int.valueOf(birth)
+                    def poids = "${params.POIDS}"
+                    poids_float = Float.valueOf(poids)
+                    def taille = "${params.TAILLE}"
+                    taille_float = Float.valueOf(birth)
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
 
