@@ -31,7 +31,9 @@ pipeline{
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
                     def poids = "${params.POIDS}"
+                    int poids_int = poids as Integer
                     def taille = "${params.TAILLE}"
+                    int taille_int = taille as Integer
                     def sexe = "${params.SEX}"
                     def act = "${params.ACTIVITE}"
                     
@@ -41,7 +43,8 @@ pipeline{
                     def now = new Date()
                     diff = now - birth
                     age = diff.year
-                    
+                    int age_int = age as Integer
+
                     //Calcul de l'IMC
                     
                     imc = poids / taille**2
@@ -59,22 +62,18 @@ pipeline{
                     }
                     
                     // Formule de Harris revue par Roza et Shizgall
-                    
-                    
-                   int value = age as Integer
-                   int value = poids as Integer
-                   int value = taille as Integer
-                    if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
-                        calcul = ((13.707 * poids) + (492.3 * taille) - (6.673 * age) + 77.607) * act 
-                    }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
-                        calcul = ((9.74 * poids) + (172.9 * taille) - (4.737 * age) + 667.51) * act
+                                       
+                    if (sexe == 'Homme') and (age_int < 60) or (imc < 30)    {
+                        calcul = ((13.707 * poids_int) + (492.3 * taille_int) - (6.673 * age_int) + 77.607) * act 
+                    }   else if (sexe == 'Femme') and (age_int < 60) or (imc < 30)   {
+                        calcul = ((9.74 * poids_int) + (172.9 * taille_int) - (4.737 * age_int) + 667.51) * act
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
-                    }   else if (sexe == 'Homme') and (age > 60) OR (imc > 30)  {
-                        calcul = (1.083 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
+                    }   else if (sexe == 'Homme') and (age_int > 60) OR (imc > 30)  {
+                        calcul = (1.083 * poids_int ** 0.48 * taille_int ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
                     }   else    {
-                        calcul = (0.963 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
+                        calcul = (0.963 * poids_int ** 0.48 * taille_int ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
                     }
                     print ("Votre total calorique est de ", calcul," calories par jour.")
                     
