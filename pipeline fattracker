@@ -26,7 +26,7 @@ pipeline{
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    int age_int = birth.toInteger()
+                    Integer age_int = birth.toInteger()
                     def poids = "${params.POIDS}"
                     poids_float = Float.valueOf(poids)
                     def taille = "${params.TAILLE}"
