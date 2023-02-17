@@ -1,30 +1,76 @@
-pipeline {
+pipeline{
+    import datetime import datetime
     agent any
     parameters {
         string(name: 'NOM', description: 'Entrez votre nom')
         string(name: 'PRENOM', description: 'Entrez votre prénom')
         string(name: 'BIRTH', description: 'Entrez votre date de naissance')
         choice(name: 'SEX', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
+        string(name: 'POIDS', description: 'Entrez votre poids')
+        string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
+        choice(name: 'ACTIVITE', choices['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive :
+        Sédentaire : aucune activité sportive
+        Activité légère : 1 à 3 entraînements par semaine
+        Activité modérée : 4 à 6 entraînements par semaine
+        Activité intense : + de 6 entraînements par semaine.')
     }
     
     stages {
-        stage('Hello') {
+         stage('Test') {
             steps {
-                echo "Hello world"
-            }
+                   echo "Test"
+           }
         }
-        stage('Test') {
-            steps {
-                echo "Test"
-            }
         }
         stage('Build') {
             steps {
                 script{
+                
+                    //Définition des variables
+                    
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
+                    def poids = "${params.POIDS}"
+                    def taille = "${params.TAILLE}"
                     def sexe = "${params.SEX}"
+                    def act = "${params.ACTIVITE}"
+                    
+                    
+                    // Définition de l'âge en utilisant la date actuelle et la date de naissance
+                    
+                    now = datetime.now()
+                    diff = now - birth
+                    age = diff.year
+                    
+                    //Calcul de l'IMC
+                    
+                    imc = poids / taille**2
+                    
+                    //Début du calcul du besoin calorique 
+                    
+                    if (act == 'Sédentaire')    {
+                        val_act = 1.375
+                    }   else if (act == 'Activité légère')  {
+                        val_act = 1.56
+                    }   else if (act == 'Activité modérée'  {
+                        val_act = 1,64
+                    }   else    {
+                        val_act = 1.82
+                    }
+                    // Formule de Harris revue par Roza et Shizgall
+                    if (sexe == 'Homme' and int(age) < 60 or imc < 30)    {
+                        calcul = ((13.707 * int(poids)) + (492.3 * int(taille)) - (6.673 * int(age)) + 77.607) * act 
+                    }   else if (sexe == 'Femme' and int(age) < 60 or imc < 30)   {
+                        calcul = ((9.74 * int(poids)) + (172,9 * int(taille)) - (4.737 * int(age)) + 667.51) * act
+                    // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
+                    }   else if (sexe == 'Homme' and int(age > 60 OR imc > 30)  {
+                        calcul = (1.083 * int(poids) ** 0,48 * int(taille) ** 0.5 * int(age)**-0.13) * (10000 / 4.1855)
+                    }   else    {
+                        calcul = (0.963 * int(poids) ** 0,48 * int(taille) ** 0.5 * int(age)**-0.13) * (10000 / 4.1855)
+                    }
+                    print ("Votre total calorique est de ", calcul," calories par jour."
+                    
                 }
             }
         }
