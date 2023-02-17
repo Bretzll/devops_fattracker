@@ -3,7 +3,7 @@
 pipeline{
     agent any
     parameters {
-        string(name: 'NOM', description: 'Entrez votre nom')
+        string(name: 'NOM', description: 'Entrez votre nom')   
         string(name: 'PRENOM', description: 'Entrez votre prénom')
         string(name: 'BIRTH', description: 'Entrez votre âge')
         choice(name: 'SEXE', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
@@ -23,12 +23,12 @@ pipeline{
                 
                     //Définition des variables
                     
-                    def nom = "${params.NOM}"
-                    def prenom = "${params.PRENOM}"
-                    def age = "${params.BIRTH}"
-                    def poids = "${params.POIDS}"
-                    def taille = "${params.TAILLE}"
-                    def sexe = "${params.SEXE}"
+                    def nom = "${params.NOM}" //string
+                    def prenom = "${params.PRENOM}" //string
+                    def age = "${params.BIRTH}" //string
+                    def poids = "${params.POIDS}" // string
+                    def taille = "${params.TAILLE}" //string
+                    def sexe = "${params.SEXE}" // string
                     def act = "${params.ACTIVITE}"
 
                     //Calcul de l'IMC
@@ -49,7 +49,7 @@ pipeline{
                     
                     // Formule de Harris revue par Roza et Shizgall
                                        
-                    if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
+                  /*  if (sexe == 'Homme') and (age < 60) or (imc < 30)    {
                         calcul = ((13.707 * poids_) + (492.3 * taille) - (6.673 * age) + 77.607) * act 
                     }   else if (sexe == 'Femme') and (age < 60) or (imc < 30)   {
                         calcul = ((9.74 * poids) + (172.9 * taille) - (4.737 * age) + 667.51) * act
@@ -61,7 +61,7 @@ pipeline{
                     }   else    {
                         calcul = (0.963 * poids ** 0.48 * taille ** 0.5 * age**-0.13) * (10000 / 4.1855)
                     }
-                    print ("Votre total calorique est de ", calcul," calories par jour.")
+                    print ("Votre total calorique est de ", calcul," calories par jour.") */
                     
                 }
             }
