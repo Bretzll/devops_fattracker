@@ -24,7 +24,6 @@ pipeline {
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    #calculer age
                     def gender = "${params.GENDER}"
                 }
             }
