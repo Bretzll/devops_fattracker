@@ -39,7 +39,7 @@ pipeline{
                     
                     // Définition de l'âge en utilisant la date actuelle et la date de naissance
                     
-                    now = datetime.now()
+                    def now = new Date()
                     diff = now - birth
                     age = diff.year
                     
