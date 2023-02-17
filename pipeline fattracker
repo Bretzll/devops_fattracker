@@ -54,7 +54,7 @@ pipeline{
                     }   else if (act == 'Activité légère')  {
                         val_act = 1.56
                     }   else if (act == 'Activité modérée'  {
-                        val_act = 1,64
+                        val_act = 1.64
                     }   else    {
                         val_act = 1.82
                     }
