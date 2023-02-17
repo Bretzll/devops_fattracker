@@ -5,7 +5,7 @@ pipeline{
     parameters {
         string(name: 'NOM', description: 'Entrez votre nom')
         string(name: 'PRENOM', description: 'Entrez votre prénom')
-        string(name: 'BIRTH', description: 'Entrez votre âge')
+        string(name: 'AGE', description: 'Entrez votre âge')
         choice(name: 'SEXE', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
         string(name: 'POIDS', description: 'Entrez votre poids')
         string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
@@ -25,14 +25,13 @@ pipeline{
                     
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
-                    def age = "${params.BIRTH}"
-                    //age_int = Int.valueOf(birth)
-                    def age_int = age as Integer
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
                     def poids = "${params.POIDS}"
-                    //poids_float = Float.valueOf(poids)
+                    poids_float = Float.valueOf(poids)
                     def poids_float = poids as FLoat
                     def taille = "${params.TAILLE}"
-                    //taille_float = Float.valueOf(birth)
+                    taille_float = Float.valueOf(birth)
                     def taille_float = taille as Float
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
