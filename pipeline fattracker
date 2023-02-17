@@ -9,13 +9,11 @@ pipeline{
         string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
         choice(name: 'ACTIVITE', choices['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
     }
-    
     stages {
          stage('Test') {
             steps {
                    echo "Test"
            }
-        }
         }
         stage('Build') {
             steps {
