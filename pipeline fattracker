@@ -4,7 +4,7 @@ pipeline {
         string(name: 'NOM', description: 'Entrez votre nom')
         string(name: 'PRENOM', description: 'Entrez votre prénom')
         string(name: 'BIRTH', description: 'Entrez votre date de naissance')
-        choice(name: 'GENDER', choices: ['Homme', 'Femme', 'Autre'], description: 'Choisir votre genre')
+        choice(name: 'SEX', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
     }
     
     stages {
@@ -24,7 +24,7 @@ pipeline {
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
-                    def gender = "${params.GENDER}"
+                    def sexe = "${params.SEX}"
                 }
             }
         }
