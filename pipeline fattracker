@@ -25,9 +25,9 @@ pipeline{
                     def prenom = "${params.PRENOM}"
                     def birth = "${params.BIRTH}"
                     def poids = "${params.POIDS}"
-                    int poids_int = poids as Integer
+                    float poids_int = poids as Float
                     def taille = "${params.TAILLE}"
-                    int taille_int = taille as Integer
+                    float taille_int = taille as float
                     def sexe = "${params.SEX}"
                     def act = "${params.ACTIVITE}"
                     
