@@ -36,7 +36,7 @@ pipeline{
 
                     //Calcul de l'IMC
                     
-                    imc = poids_float / taille_float**2
+                    imc = poids_float / Math.pow(taille_float,2)
                     
                     //Début du calcul du besoin calorique 
                     def val_act = 0
@@ -61,9 +61,9 @@ pipeline{
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
                     }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
-                        calcul = (1.083 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
+                        calcul = (1.083 * Math.pow(poids_float,0.48) * Math.pow(taille_float,0.5) * Math.pow(age_int,-0.13)) * (10000 / 4.1855)
                     }   else    {
-                        calcul = (0.963 * poids_float ** 0.48 * taille_float ** 0.5 * age_int**-0.13) * (10000 / 4.1855)
+                        calcul = (0.963 * Math.pow(poids_float,0.48) * Math.pow(taille_float,0.5) * Math.pow(age_int,-0.13)) * (10000 / 4.1855)
                     }
                     print ("Votre total calorique est de ", calcul," calories par jour.")
                     
