@@ -56,9 +56,9 @@ pipeline{
                     
                     def calcul = 0           
                     if (sexe == 'Homme' && age_int < 60 || imc < 30)    {
-                        calcule = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * val_act 
+                        calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * val_act 
                     }   else if (sexe == 'Femme' && age < 60 || imc < 30)   {
-                        calcule = ((9.74 * poids_float) + (172.9 * taille_float) - (4.737 * age_int) + 667.51) * val_act
+                        calcul = ((9.74 * poids_float) + (172.9 * taille_float) - (4.737 * age_int) + 667.51) * val_act
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
@@ -67,11 +67,11 @@ pipeline{
                     bl_age = powerFunction(age_int, -0.13)
                     
                     }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
-                        calcule = (1.083 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
+                        calcul = (1.083 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
                     }   else    {
-                        calcule = (0.963 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
+                        calcul = (0.963 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
                     }
-                    echo "Votre total calorique est de " calcule " calories par jour."
+                    echo "Votre total calorique est de ${calcul} calories par jour."
                     
                 }
             }
