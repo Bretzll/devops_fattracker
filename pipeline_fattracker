@@ -62,6 +62,10 @@ pipeline{
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
+                    bl_ps = powerFunction(poids_float, 0.48)
+                    bl_tl = powerFunction(taille_float, 0.5)
+                    bl_age = powerFunction(age_int, -0.13)
+                    
                     }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
                         calcul = (1.083 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
                     }   else    {
