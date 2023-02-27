@@ -71,7 +71,7 @@ pipeline{
                     }   else    {
                         calcul = (0.963 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
                     }
-                    echo ("Votre total calorique est de ", calcul," calories par jour.")
+                    echo "Votre total calorique est de ", calcul," calories par jour."
                     
                 }
             }
