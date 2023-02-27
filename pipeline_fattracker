@@ -80,7 +80,7 @@ pipeline{
                     
                     calcul_perteglo = 7700 * perte_float
                     calcul_pertehebdo = calcul - (perte_float / 7)
-                    echo "Pour perdre ${perte} kg par jour, vous devrez consommer ${calcul} calories."
+                    echo "Pour perdre ${perte} kg par jour, vous devrez consommer ${calcul_pertehebdo} calories."
                     
                     
                 }
