@@ -79,7 +79,7 @@ pipeline{
                     // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
                     
                     calcul_perteglo = 7700 * perte_float
-                    calcul_pertehebdo = calcul - (perte_perteglo / 7)
+                    calcul_pertehebdo = calcul - (calcul_perteglo / 7)
                     echo "Pour perdre ${perte} kg par jour, vous devrez consommer ${calcul_pertehebdo} calories."
                     
                     
