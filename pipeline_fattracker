@@ -14,15 +14,11 @@ pipeline{
         choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
     }
     stages {
-         stage('Test') {
-            steps {
-                   echo "Test"
-           }
-        }
-        stage('Build') {
+        stage('Building [EPIC] Surveillance de l'alimentation') {
             steps {
                 script{
-                
+                    
+                    echo "Building [EPIC] Surveillance de l'alimentation"
                     //Définition des variables
                     
                     def nom = "${params.NOM}"
@@ -94,15 +90,25 @@ pipeline{
                     
                     calcul_perteglo = 7700 * perte_float
                     calcul_pertehebdo = calcul - (calcul_perteglo / 7)
-                    echo "Pour perdre ${perte} kg par jour, vous devrez consommer ${calcul_pertehebdo} calories par jour."
+                    echo "Pour perdre ${perte} kg par semaine, vous devrez consommer ${calcul_pertehebdo} calories par jour."
                     
                     
                 }
             }
         }
-        stage('Deploy') {
+        stage('[EPIC] Partie de création d'un programme d'alimentation') {
             steps {
-                echo "Deploy"
+                   echo "[EPIC] Partie de création d'un programme d'alimentation"
+           }
+        }
+        stage('[EPIC] Base de données de recette d'aliment et nutriment') {
+            steps {
+                echo "[EPIC] Base de données de recette d'aliment et nutriment"
+            }
+        }
+        stage('[EPIC] Challenge - un challenge personnalisé, sur demande de l'utilisateur') {
+            steps {
+                echo "[EPIC] Challenge - un challenge personnalisé, sur demande de l'utilisateur"
             }
         }
     }
