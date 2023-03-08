@@ -42,6 +42,19 @@ pipeline{
                     
                     imc = poids_float / (taille_float*taille_float)
                     
+                    if (imc < 18.5) {
+                        echo "Vous êtes en insuffisance pondérale et avez un imc de ${imc}."
+                    }   else if (imc > 18.5 and imc < 25)  {
+                        echo "Vous avez une corpulence normale et avez un imc de ${imc}."
+                    }   else if (imc > 25 and imc < 30)    {
+                        echo "Vous êtes en surpoids et avez un imc de ${imc}."
+                    }   else if (imc > 30 and imc < 35)    {
+                        echo "Vous êtes en obésité modérée et avez un imc de ${imc}."
+                    }   else if (imc > 35 and imc < 40)    {
+                        echo "Vous êtes en obésité sévère et avez un imc de ${imc}."
+                    }   else
+                        echo "Vous êtes en obésité morbide et avez un imc de ${imc}."
+                    
                     //Début du calcul du besoin calorique 
                     def val_act = 0
                     
