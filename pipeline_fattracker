@@ -38,7 +38,7 @@ pipeline{
                     def perte = "${params.PERTE}"
                     perte_float = Double.valueOf(perte)
 
-                    //Calcul de l'IMC
+                    //Calcul et affichage de l'IMC 
                     
                     imc = poids_float / (taille_float*taille_float)
                     
