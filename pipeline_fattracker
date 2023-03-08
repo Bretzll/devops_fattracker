@@ -96,7 +96,7 @@ pipeline{
                 }
             }
         }
-        stage('Build') {
+        stage('Build_2') {
             steps {
                    echo "Building [EPIC] Partie de création d'un programme d'alimentation"
            }
