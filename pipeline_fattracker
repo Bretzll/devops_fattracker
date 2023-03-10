@@ -121,11 +121,7 @@ pipeline{
                     val_pro_gr_re = val_pro_gr / nbre_re_int
                     val_lip_gr_re = val_lip_gr / nbre_re_int
                     val_glu_gr_re = val_glu_gr / nbre_re_int
-                    
-                    val_pro_gr_re_min = val_pro_gr_re - 3
-                    val_lip_gr_re_min = val_lip_gr_re - 3
-                    val_glu_gr_re_min = val_glu_gr_re - 3
-                    
+
                     val_pro_gr_re_max = val_pro_gr_re + 5
                     val_lip_gr_re_max = val_lip_gr_re + 5
                     val_glu_gr_re_max = val_glu_gr_re + 5
@@ -134,7 +130,7 @@ pipeline{
                     
                     //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
                     
-                    def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&minCarbs=${val_glu_gr_re_min}&maxCarbs=${val_glu_gr_re_max}&minProtein=${val_pro_gr_re_min}&maxProtein=${val_pro_gr_re_max}&minFat=${val_lip_gr_re_min}&maxFat=${val_lip_gr_re_max}"
+                    def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
                    
                     //Parsing et affichage du résutlat en JSON
                     
