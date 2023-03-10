@@ -97,8 +97,7 @@ pipeline{
                     
                     def repas = response.content
                     
-                    def jsonSlurper = new JsonSlurper()
-                    repas_parse = jsonSlurper.parseText(repas)
+                    repas_parse = JsonOutput.toJson(repas)
                     echo "Vous pouvez manger ces respas-ci : "
                     println(repas_parse.title)
                                                             
