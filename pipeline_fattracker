@@ -92,7 +92,7 @@ pipeline{
                     calcul_pertehebdo = calcul - (calcul_perteglo / 7)
                     echo "Pour perdre ${perte} kg par semaine, vous devrez consommer ${calcul_pertehebdo} calories par jour."
                     
-                    def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apikey=de54e436479d412991dafdd39eeef448&maxCalories=${calcul_pertehebdo}"
+                    def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${calcul_pertehebdo}"
                     node() {
                         writeFile file: 'repas.json', text: response.content
                     }
