@@ -95,8 +95,7 @@ pipeline{
                     
                     def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${calcul_pertehebdo}"
                     println("Response: ${response.content}")
-                    }
-                                        
+                                                            
                 }
             }
         }
