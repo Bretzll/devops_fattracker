@@ -100,12 +100,22 @@ pipeline{
                     
                     nbre_cal_re = calcul_pertehebdo/nbre_re_int 
                     
-                    //Calcul des apports protéique, glucidique et lipidique nécessaires par jour
+                    //Calcul des apports protéiques, glucidiques et lipidiques nécessaires par jour
                     
-                    val_pro_gr = (calcul_pertehebdo * 0.35) / 4
+                    if (act == 'Sédentaire')    {
+                        val_pro = 0.8
+                    }   else if (act == 'Activité légère')  {
+                        val_pro = 1.2
+                    }   else if (act == 'Activité modérée')  {
+                        val_pro = 1.6
+                    }   else    {
+                        val_pro = 2
+                    }
+                    
+                    val_pro_gr = poids_float * val_pro
                     val_lip_gr = (poids_float)
                     val_glu_gr = (calcul_pertehebdo - ((val_pro_gr * 4) + (val_lip_gr * 9))) / 4
-                    
+                                       
                     echo "Vous avez besoin de ${val_pro_gr} grammes de protéines, ${val_lip_gr} grammes de lipides et ${val_glu_gr} grammes de glucides par jour."
                                         
                     val_pro_gr_re = val_pro_gr / nbre_re_int
