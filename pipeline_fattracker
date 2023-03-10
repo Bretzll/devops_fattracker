@@ -1,5 +1,6 @@
 import java.text.SimpleDateFormat
 import java.lang.Math
+import groovy.json.*
 
 pipeline{
     agent any
@@ -96,6 +97,9 @@ pipeline{
                     node() {
                         writeFile file: 'repas.json', text: response.content
                     }
+                    
+                    println JsonOutput.toJson(repas.json)
+                    println JsonOutput.toJson(respons.content)
                     
                 }
             }
