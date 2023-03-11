@@ -131,13 +131,12 @@ pipeline{
                     //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
                     
                     def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
-                    node() {
-                        writeFile file: 'repas.json', text: response.content
-                    }
+                    
                     //Parsing et affichage du résutlat en JSON
                     
+                    def rep = response.content
                     def jsonSlurper = new JsonSlurper()
-                    repas_parse = jsonSlurper.parseText(new File(repas.json))
+                    repas_parse = jsonSlurper.parseText(rep)
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
                     println(repas_parse.title)            
                     
