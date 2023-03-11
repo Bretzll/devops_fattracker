@@ -135,7 +135,7 @@ pipeline{
                     //Parsing et affichage du résutlat en JSON
                     
                     def jsonSlurper = new JsonSlurper()
-                    repas_parse = jsonSlurper.parse(response.content)
+                    repas_parse = jsonSlurper.parseText(response.content)
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
                     println(repas_parse.title)            
                     
