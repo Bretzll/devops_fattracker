@@ -14,6 +14,7 @@ pipeline{
         choice(name: 'ACTIVITE', choices: ['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
         choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
         choice(name: 'NBRE_RE', choices: ['1', '2', '3', '4'], description: 'Choisissez le nombre de repas que vous voulez manger par jour')
+        string(name: 'EMAIL', description: 'Entrez votre email')
     }
     stages {
         stage('Build') {
@@ -25,18 +26,37 @@ pipeline{
                     
                     def nom = "${params.NOM}"
                     def prenom = "${params.PRENOM}"
-                    def age = "${params.AGE}"
-                    int age_int = age as Integer
-                    def poids = "${params.POIDS}"
-                    poids_float = Double.valueOf(poids)
-                    def taille = "${params.TAILLE}"
-                    taille_float = Double.valueOf(taille)
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
+                    
+                    def email = "${params.EMAIL}"
+                    def id = '''{
+                        "email": "${email}" }'''
+                    
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
+                    
+                    def taille = "${params.TAILLE}"
+                    taille_float = Double.valueOf(taille)
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
                     def perte = "${params.PERTE}"
                     perte_float = Double.valueOf(perte)
+                    
                     def nbre_re = "${params.NBRE_RE}"
                     nbre_re_int = Double.valueOf(nbre_re)
+                    
+                    def date = new Date()
+                    def cur_date = new SimpleDateFormat("MM/dd/yyyy")
+                    
+                    if (fileExists('${prenom}_${nom}_${id}.json')) {
+                        def infos_deb = '''{
+                            "nom": "${nom}",
+                            "prenom": "${prenom}"
+                            "datedebut": "${cur_date}"
+                            ""
                     
                     //Calcul et affichage de l'IMC 
                     
@@ -138,6 +158,9 @@ pipeline{
                     def jsonSlurper = new JsonSlurper()
                     repas_parse = jsonSlurper.parseText(rep)
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
+                    println(repas_parse.title)
+                    
+                    //Début du challenge
                     
                 }
             }
