@@ -138,7 +138,6 @@ pipeline{
                     def jsonSlurper = new JsonSlurper()
                     repas_parse = jsonSlurper.parseText(rep)
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
-                    println(repas_parse.title)            
                     
                 }
             }
