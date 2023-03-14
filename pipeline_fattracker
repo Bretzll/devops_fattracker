@@ -1,6 +1,7 @@
 import java.text.SimpleDateFormat
 import java.lang.Math
 import groovy.json.*
+import groovy.sql.Qsl
 
 pipeline{
     agent any
@@ -28,11 +29,8 @@ pipeline{
                     def prenom = "${params.PRENOM}"
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
-                    
                     def email = "${params.EMAIL}"
-                    def id = '''{
-                        "email": "${email}" }'''
-                    
+                                        
                     def age = "${params.AGE}"
                     int age_int = age as Integer
                     
@@ -50,14 +48,7 @@ pipeline{
                     
                     def date = new Date()
                     def cur_date = new SimpleDateFormat("MM/dd/yyyy")
-                    
-                    if (fileExists('${prenom}_${nom}_${id}.json')) {
-                        def infos_deb = '''{
-                            "nom": "${nom}",
-                            "prenom": "${prenom}"
-                            "datedebut": "${cur_date}"
-                            ""
-                    
+                                        
                     //Calcul et affichage de l'IMC 
                     
                     imc = poids_float / (taille_float*taille_float)
@@ -161,7 +152,10 @@ pipeline{
                     println(repas_parse.title)
                     
                     //Début du challenge
-                    
+
+                    sh(script:'''
+                        mysql -u root -proot -h 127.0.0.1 -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values (${nom}, ${prenom}, ${cur_date}, ${poids_float}, ${age}, ${email}"
+                    ''')
                 }
             }
         }
