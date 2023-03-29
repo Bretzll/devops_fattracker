@@ -157,7 +157,7 @@ pipeline{
                     try {
                         sh(script:'''
                             mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', '${poids_float}', '${age_int}', '${email}'); insert into email (mail) values (${email});"
-                        '''}
+                        ''')
                     } catch (Exception e) {
                         sh(script:'''
                             mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select nom, prenom from user where nom = ${nom} and prenom = ${prenom};"
