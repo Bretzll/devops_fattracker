@@ -47,7 +47,7 @@ pipeline{
                     nbre_re_int = Double.valueOf(nbre_re)
                     
                     def date = new Date()
-                    def cur_date = date.format("YYYY/mm/dd")
+                    def cur_date = date.format("YYYY/MM/dd")
                                         
                     //Calcul et affichage de l'IMC 
                     
