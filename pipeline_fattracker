@@ -155,12 +155,12 @@ pipeline{
                     // Début du challenge
                     
                     try {
-                        def insert = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\insert_into.bat".execute()
-                        def output_ins = new BufferedReader (new InputStreamReader(insert.getInputStream()))
+                        def ins = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\insert_into.bat".execute()
+                        def output_ins = new BufferedReader (new InputStreamReader(ins.getInputStream()))
                         while ((line = output_ins.readLine()) != null) {log.info line}
                     } catch (Exception e) {
-                        def select = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\select.bat".execute()
-                        def output_sel = new BufferedReader (new InputStreamReader(insert.getInputStream()))
+                        def sel = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\select.bat".execute()
+                        def output_sel = new BufferedReader (new InputStreamReader(sel.getInputStream()))
                         while ((line = output_sel.readLine()) != null) {log.info line}
 
                     }
