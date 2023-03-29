@@ -1,7 +1,7 @@
 import java.text.SimpleDateFormat
 import java.lang.Math
 import groovy.json.*
-import groovy.sql.Qsl
+import groovy.sql.Sql
 
 pipeline{
     agent any
