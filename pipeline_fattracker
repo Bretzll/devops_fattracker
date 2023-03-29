@@ -161,7 +161,7 @@ pipeline{
                         """
                     } catch (Exception e) {
                         bat """
-                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select nom, prenom from user where nom = ${nom} and prenom = ${prenom};"
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select nom, prenom from user where nom = '${nom}' and prenom = '${prenom}';"
                         """
                     
                    }
