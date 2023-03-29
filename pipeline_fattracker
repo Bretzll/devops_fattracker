@@ -146,7 +146,6 @@ pipeline{
                     //Parsing et affichage du résutlat en JSON
                     
                     def rep = response.content
-                    @NonCPS
                     def jsonSlurper = new groovy.json.JsonSlurperClassic()
                     repas_parse = jsonSlurper.parseText(rep)
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
