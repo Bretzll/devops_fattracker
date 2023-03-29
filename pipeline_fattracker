@@ -152,12 +152,6 @@ pipeline{
                     echo "Vous pouvez manger ces respas-ci à chaque repas : "
                     println(repas_parse.title)
                     
-                    //Début du challenge
-
-                    sh(script:'''
-                        mysql -u root -proot -h 127.0.0.1 -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values (${nom}, ${prenom}, ${cur_date}, ${poids_float}, ${age}, ${email}"
-                    ''')
-                }
             }
         }
         stage('Build_2') {
