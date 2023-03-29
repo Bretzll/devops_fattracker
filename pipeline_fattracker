@@ -157,8 +157,8 @@ pipeline{
                     
                     try {
                         bat """
-                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', '${poids_float}', '${age_int}', '${email}');
-                        insert into email (mail) values (${email});"
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${date}', '${poids_float}', '${age_int}', '${email}');"
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into email (mail) values (${email});"
                         """
                     } catch (Exception e) {
                         bat """
