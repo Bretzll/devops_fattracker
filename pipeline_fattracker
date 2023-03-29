@@ -155,13 +155,14 @@ pipeline{
                     // Début du challenge
                     
                     try {
-                        sh(script:'''
-                            mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', '${poids_float}', '${age_int}', '${email}'); insert into email (mail) values (${email});"
-                        ''')
+                        def insert = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\insert_into.bat".execute()
+                        def output_ins = new BufferedReader (new InputStreamReader(insert.getInputStream()))
+                        while ((line = output_ins.readLine()) != null) {log.info line}
                     } catch (Exception e) {
-                        sh(script:'''
-                            mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select nom, prenom from user where nom = ${nom} and prenom = ${prenom};"
-                        ''')
+                        def select = "cmd /c C:\\Users\\tolio\\OneDrive\\Documents\\Cours\\DevOps\\Scripts\\select.bat".execute()
+                        def output_sel = new BufferedReader (new InputStreamReader(insert.getInputStream()))
+                        while ((line = output_sel.readLine()) != null) {log.info line}
+
                     }
                 }
             }
