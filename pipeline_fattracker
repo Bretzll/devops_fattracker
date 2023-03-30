@@ -179,7 +179,6 @@ pipeline{
                         }   else if (poids_float > poids_deb)    {
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_float}.sub(${poids_deb}) en ${duration.days} jours. Vous pouvez le faire, nous croyons en vous!"
                         }   else    {
-                                use(groovy.time.TimeCategory)    {
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous n'avez ni gagné ni perdu de poids en ${duration.days} jours. Vous pouvez le faire, nous croyons en vous!"
                                                         
                         }
