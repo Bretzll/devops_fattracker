@@ -158,30 +158,55 @@ pipeline{
                     // Début du challenge
                     
                     try {
+                        
+                        // Requête SQL pour insérer les données dans la base de données (si ces dernières ne l'ont pas déjà été)
+                        
                         bat """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', ${poids_float}, ${age_int}, '${email}');"
                         """
+                        
+                        // Définition d'une exception au cas où les données ont déjà été rentrées, permettant ainsi d'afficher les données rentrées au début du challenge
+                        
                     } catch (Exception e) {                        
+                        
+                        // Requête SQL permettant de retrouver la date de début du challenge pour la personne en fonction de son nom, prénom et adresse mail (les trois sont associés pour éviter des duplicatas dans la base de données)
+                        
                         def date_scr =
                         """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        def date_deb = bat(script: date_scr, returnStdout: true)
-                        echo "${date_deb}"
+                        
+                        // Parsing de la date en format date (le Stdout retourne un résultat en string)
+                        
+                        def date_debut = bat(script: date_scr, returnStdout: true)
+                        def pattern = "YYYY-MM-dd"
+                        def date_deb = new SimpleDateFormat(pattern).parse(date_debut)
+                        
+                        // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
+                        
                         def poids_scr = 
                         """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        def poids_deb = bat(script: poids_scr, returnStdout: true)
-                        echo "${poids_deb}"
+                        
+                        // Parsing du poids en format Double (le Stdout retourne un résultat en string)
+                        
+                        def poids_debut = bat(script: poids_scr, returnStdout: true)
+                        def poids_deb = Double.valueOf(poids_debut)
+                        
+                        // Calcul du temps écoulé en jours depuis le début du challenge (utilisation du @NonCPS car une opération sur une date n'est pas serializable)
                         
                         @NonCPS
                         def duration = cur_date - date_deb
-                                                
+                        
+                        // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
+                        
                         if (poids_float < poids_deb)  {
-                                println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_deb}.sub(${poids_float}) en ${duration} jours. Bravo! Vous pouvez être fier de vous!"
+                                poids_per = poids_deb - poids_float
+                                println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Bravo! Vous pouvez être fier de vous!"
                         }   else if (poids_float > poids_deb)    {
-                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_float}.sub(${poids_deb}) en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
+                                    poids_obt = poids_float - poids_deb
+                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_obt} en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
                         }   else    {
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous n'avez ni gagné ni perdu de poids en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
                                                         
