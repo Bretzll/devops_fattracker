@@ -165,18 +165,20 @@ pipeline{
                         bat """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        def poids_deb =
+                        def poids_debut = 
                         bat """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
+                        BigDecimal poids_deb = New BigDecimal("${poids_debut}")
+                        BigDecimal poids_act = New BigDecimal("${poids_float}")
                         if (poids_float < poids_deb)  {
-                            double poids_per = ((double) poids_deb) - ((double) poids_float)
+                            poids_dif = (poids_deb.subtract(poids_float))
                             use(groovy.time.TimeCategory)    {
                                 def duration = cur_date - date_deb
                                 println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration.days} jours. Bravo! Vous pouvez être fier de vous!"
                             }
                         }   else if (poids_float > poids_deb)    {
-                                double poids_obt = ((double) poids_float) - ((double) poids_deb)
+                                poids_obt = (poids_float.subtract(poids_deb))
                                 use(groovy.time.TimeCategory)    {
                                     def duration = cur_date - date_deb
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_obt} en ${duration.days} jours. Vous pouvez le faire, nous croyons en vous!"
