@@ -162,14 +162,18 @@ pipeline{
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', ${poids_float}, ${age_int}, '${email}');"
                         """
                     } catch (Exception e) {                        
-                        def date_deb =
-                        bat """
+                        def date_scr =
+                        """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        def poids_deb = 
-                        bat """
+                        def date_deb = bat(script: date_scr, returnStdout: true)
+                        echo ${date_deb}
+                        def poids_scr = 
+                        """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
+                        def poids_deb = bat(script: poids_scr, returnStdout: true)
+                        echo ${poids_deb}
                         
                         @NonCPS
                         def duration = cur_date - date_deb
