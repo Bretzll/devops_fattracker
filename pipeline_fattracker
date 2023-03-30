@@ -181,10 +181,8 @@ pipeline{
                         // Parsing de la date en format date (le Stdout retourne un résultat en string)
                         
                         def date_debut = bat(script: date_scr, returnStdout: true)
-                        echo "${date_debut}"
-                        
-                        // def pattern = "YYYY-MM-dd"
-                        // def date_deb = new SimpleDateFormat(pattern).parse(date_debut)
+                        def pattern = "YYYY-MM-dd"
+                        def date_deb = new SimpleDateFormat(pattern).parse(date_debut)
                         
                         // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
                         
@@ -196,8 +194,8 @@ pipeline{
                         
                         // Parsing du poids en format Double (le Stdout retourne un résultat en string)
                         
-                        // def poids_debut = bat(script: poids_scr, returnStdout: true)
-                        // def poids_deb = Double.valueOf(poids_debut)
+                        def poids_debut = bat(script: poids_scr, returnStdout: true)
+                        def poids_deb = Double.valueOf(poids_debut)
                         
                         // Calcul du temps écoulé en jours depuis le début du challenge (utilisation du @NonCPS car une opération sur une date n'est pas serializable)
                         
