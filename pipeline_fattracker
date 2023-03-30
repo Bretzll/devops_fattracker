@@ -162,6 +162,7 @@ pipeline{
                         // Requête SQL pour insérer les données dans la base de données (si ces dernières ne l'ont pas déjà été)
                         
                         bat """
+                        @echo off
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', ${poids_float}, ${age_int}, '${email}');"
                         """
                         
@@ -173,6 +174,7 @@ pipeline{
                         
                         def date_scr =
                         """
+                        @echo off
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         
@@ -188,6 +190,7 @@ pipeline{
                         
                         def poids_scr = 
                         """
+                        @echo off
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         
