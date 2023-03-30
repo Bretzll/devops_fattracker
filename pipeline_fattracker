@@ -169,13 +169,13 @@ pipeline{
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         if (poids_float < poids_deb)  {
-                            poids_per = poids_deb - poids_float
+                            double poids_per = poids_deb - poids_float
                             use(groovy.time.TimeCategory)    {
                                 def duration = cur_date - date_deb
                                 println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration.days} jours. Bravo! Vous pouvez être fier de vous!"
                             }
                         }   else if (poids_float > poids_deb)    {
-                                poids_obt = poids_float - poids_deb
+                                double poids_obt = poids_float - poids_deb
                                 use(groovy.time.TimeCategory)    {
                                     def duration = cur_date - date_deb
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_debut} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_obt} en ${duration.days} jours. Vous pouvez le faire, nous croyons en vous!"
