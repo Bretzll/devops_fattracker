@@ -145,7 +145,7 @@ pipeline{
                     
                     def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
                     
-                    //Parsing et affichage du résutlat en JSON
+                    //Parsing et affichage du résutlat en JSON (utilisation du @NonCPS pour éviter les problèmes de serialization)
                     
                     def rep = response.content
                     @NonCPS
@@ -196,10 +196,11 @@ pipeline{
                         def poids_debut = bat(script: poids_scr, returnStdout: true)
                         def poids_deb = Double.valueOf(poids_debut)
                         
-                        // Calcul du temps écoulé en jours depuis le début du challenge (utilisation du @NonCPS car une opération sur une date n'est pas serializable)
+                        // Calcul du temps écoulé en jours depuis le début du challenge
                         
-                        @NonCPS
-                        def duration = cur_date - date_deb
+                        def duration = date - date_deb
+                        duration as Integer
+                        Integer reste = duration - 90
                         
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
