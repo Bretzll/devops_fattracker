@@ -3,6 +3,7 @@ import java.lang.Math
 import groovy.json.*
 import java.math.BigDecimal
 import groovy.sql.Sql
+import groovy.time.TimeCategory
 
 pipeline{
     agent any
@@ -171,9 +172,7 @@ pipeline{
                         """
                         
                         @NonCPS
-                        use (groovy.time.TimeCategory) {
                             def duration = cur_date - date_deb
-                        }
                         
                         if (poids_float < poids_deb)  {
                                 println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_deb}.sub(${poids_float}) en ${duration.days} jours. Bravo! Vous pouvez être fier de vous!"
