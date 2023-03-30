@@ -201,7 +201,7 @@ pipeline{
                         // Calcul du temps écoulé en jours depuis le début du challenge (utilisation du @NonCPS car une opération sur une date n'est pas serializable)
                         
                         @NonCPS
-                        def duration = (cur_date - date_deb
+                        def duration = cur_date - date_deb
                         
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
