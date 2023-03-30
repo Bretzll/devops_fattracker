@@ -164,11 +164,10 @@ pipeline{
                         bat """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        def poids_debut =
+                        def poids_deb =
                         bat """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        double poids_deb = poids_debut
                         if (poids_float < poids_deb)  {
                             poids_per = poids_deb - poids_float
                             use(groovy.time.TimeCategory)    {
