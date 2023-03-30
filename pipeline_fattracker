@@ -181,9 +181,7 @@ pipeline{
                         // Parsing de la date en format date (le Stdout retourne un résultat en string)
                         
                         def date_debut = bat(script: date_scr, returnStdout: true)
-                        echo "${date_debut}"
-                        def pattern = "YYYY-MM-dd"
-                        def date_deb = new SimpleDateFormat(pattern).parse(date_debut)
+                        def date_deb = new SimpleDateFormat("yyy-MM-dd").parse(date_debut)
                         
                         // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
                         
