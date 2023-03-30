@@ -170,6 +170,7 @@ pipeline{
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         
+                        @NonCPS
                         use(groovy.time.TimeCategory)    {
                             def duration = cur_date - date_deb
                         }
