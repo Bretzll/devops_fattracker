@@ -167,13 +167,13 @@ pipeline{
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         def date_deb = bat(script: date_scr, returnStdout: true)
-                        echo ${date_deb}
+                        echo "${date_deb}"
                         def poids_scr = 
                         """
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
                         def poids_deb = bat(script: poids_scr, returnStdout: true)
-                        echo ${poids_deb}
+                        echo "${poids_deb}"
                         
                         @NonCPS
                         def duration = cur_date - date_deb
