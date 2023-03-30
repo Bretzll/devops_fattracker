@@ -181,6 +181,7 @@ pipeline{
                         // Parsing de la date en format date (le Stdout retourne un résultat en string)
                         
                         def date_debut = bat(script: date_scr, returnStdout: true)
+                        echo "${date_debut}"
                         def pattern = "YYYY-MM-dd"
                         def date_deb = new SimpleDateFormat(pattern).parse(date_debut)
                         
@@ -200,7 +201,7 @@ pipeline{
                         // Calcul du temps écoulé en jours depuis le début du challenge (utilisation du @NonCPS car une opération sur une date n'est pas serializable)
                         
                         @NonCPS
-                        def duration = cur_date - date_deb
+                        def duration = (cur_date - date_deb
                         
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
