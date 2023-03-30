@@ -172,7 +172,7 @@ pipeline{
                         """
                         
                         @NonCPS
-                        use(groovy.time.TimeCategory){
+                        use groovy.time.TimeCategory {
                             def duration = (cur_date - date_deb).days
                         }
                         
