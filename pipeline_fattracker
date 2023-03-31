@@ -18,38 +18,43 @@ pipeline{
         choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
         choice(name: 'NBRE_RE', choices: ['1', '2', '3', '4'], description: 'Choisissez le nombre de repas que vous voulez manger par jour')
         string(name: 'EMAIL', description: 'Entrez votre email')
+        
     }
     stages {
-        stage('[EPIC] Surveillance de l\'alimentation') {
+        stage('[EPIC] Surveillance de l'alimentation') {
+             //Définition des variables
+                    
+        def nom = "${params.NOM}"
+        def prenom = "${params.PRENOM}"
+        def sexe = "${params.SEXE}"
+        def act = "${params.ACTIVITE}"
+        def email = "${params.EMAIL}"
+        
+        def age = "${params.AGE}"
+        int age_int = age as Integer
+        
+        def taille = "${params.TAILLE}"
+        taille_float = Double.valueOf(taille)
+                    
+        def poids = "${params.POIDS}"
+        poids_float = Double.valueOf(poids)
+                    
+        def perte = "${params.PERTE}"
+        perte_float = Double.valueOf(perte)
+                    
+        def nbre_re = "${params.NBRE_RE}"
+        nbre_re_int = Double.valueOf(nbre_re)
+        
+        def date = new Date()
+        def cur_date = date.format('YYYY-MM-dd')
+
+        def calcul = 0
+
             steps {
                 script {
                     
                     echo "Building [EPIC] Surveillance de l'alimentation"
-                    //Définition des variables
                     
-                    def nom = "${params.NOM}"
-                    def prenom = "${params.PRENOM}"
-                    def sexe = "${params.SEXE}"
-                    def act = "${params.ACTIVITE}"
-                    def email = "${params.EMAIL}"
-                                        
-                    def age = "${params.AGE}"
-                    int age_int = age as Integer
-                    
-                    def taille = "${params.TAILLE}"
-                    taille_float = Double.valueOf(taille)
-                    
-                    def poids = "${params.POIDS}"
-                    poids_float = Double.valueOf(poids)
-                    
-                    def perte = "${params.PERTE}"
-                    perte_float = Double.valueOf(perte)
-                    
-                    def nbre_re = "${params.NBRE_RE}"
-                    nbre_re_int = Double.valueOf(nbre_re)
-                    
-                    def date = new Date()
-                    def cur_date = date.format('YYYY-MM-dd')
                                         
                     //Calcul et affichage de l'IMC 
                     
@@ -83,7 +88,6 @@ pipeline{
                     
                     // Formule de Harris revue par Roza et Shizgall
                     
-                    def calcul = 0           
                     if (sexe == 'Homme' && age_int < 60 || imc < 30)    {
                         calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * val_act 
                     }   else if (sexe == 'Femme' && age < 60 || imc < 30)   {
@@ -105,10 +109,11 @@ pipeline{
                 }
             }
         }
-        stage('[EPIC] Partie de création d\'un programme d\'alimentation') {
+
+        stage('[EPIC] Partie de création d'un programme d'alimentation') {
             steps {
                 script {                    
-                                        
+                    
                     // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
 
                     calcul_perteglo = 7700 * perte_float
@@ -151,7 +156,7 @@ pipeline{
                 }
             }
         }
-        stage('[EPIC] Base de données de recette d\'aliment et nutriment') {
+        stage('[EPIC] Base de données de recette d'aliment et nutriment') {
             steps {
                 script {
                     //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
@@ -170,7 +175,7 @@ pipeline{
                 }
             }
         }
-         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l\'utilisateur') {
+         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l'utilisateur') {
             steps {
                 script {
                     // Début du challenge
