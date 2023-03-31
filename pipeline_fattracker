@@ -5,6 +5,8 @@ import java.math.BigDecimal
 import groovy.sql.Sql
 import groovy.time.TimeCategory
 
+def calcul = 0
+
 pipeline{
     agent any
     parameters {
@@ -20,34 +22,6 @@ pipeline{
         string(name: 'EMAIL', description: 'Entrez votre email')
         
     }
-     //Définition des variables
-                    
-        def nom = "${params.NOM}"
-        def prenom = "${params.PRENOM}"
-        def sexe = "${params.SEXE}"
-        def act = "${params.ACTIVITE}"
-        def email = "${params.EMAIL}"
-        
-        def age = "${params.AGE}"
-        int age_int = age as Integer
-        
-        def taille = "${params.TAILLE}"
-        taille_float = Double.valueOf(taille)
-                    
-        def poids = "${params.POIDS}"
-        poids_float = Double.valueOf(poids)
-                    
-        def perte = "${params.PERTE}"
-        perte_float = Double.valueOf(perte)
-                    
-        def nbre_re = "${params.NBRE_RE}"
-        nbre_re_int = Double.valueOf(nbre_re)
-        
-        def date = new Date()
-        def cur_date = date.format('YYYY-MM-dd')
-
-        def calcul = 0
-
     stages {
         stage('[EPIC] Surveillance de l\'alimentation') {
             steps {
@@ -55,7 +29,32 @@ pipeline{
                     
                     echo "Building [EPIC] Surveillance de l'alimentation"
                     
-                                        
+                     //Définition des variables
+                    
+                    def nom = "${params.NOM}"
+                    def prenom = "${params.PRENOM}"
+                    def sexe = "${params.SEXE}"
+                    def act = "${params.ACTIVITE}"
+                    def email = "${params.EMAIL}"
+        
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
+        
+                    def taille = "${params.TAILLE}"
+                    taille_float = Double.valueOf(taille)
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
+                    def perte = "${params.PERTE}"
+                    perte_float = Double.valueOf(perte)
+                    
+                    def nbre_re = "${params.NBRE_RE}"
+                    nbre_re_int = Double.valueOf(nbre_re)
+        
+                    def date = new Date()
+                    def cur_date = date.format('YYYY-MM-dd')
+
                     //Calcul et affichage de l'IMC 
                     
                     imc = poids_float / (taille_float*taille_float)
