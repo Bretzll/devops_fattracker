@@ -202,11 +202,18 @@ pipeline{
                         duration as Integer
                         Integer reste = duration - 90
                         
+                        poids_per_jours = perte_float / 7
+                        poids_per_challenge = poids_per_jours * reste
+                        
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
                         if (poids_float < poids_deb)  {
                                 poids_per = poids_deb - poids_float
-                                println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Bravo! Vous pouvez être fier de vous!"
+                                if (poids_per < poids_per_challenge)    {
+                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Vous avez perdu moins de ${poids_per_challenge}. Vous n'avez pas réussi le challenge, mais vous pouvez cependant être fier de vous pour ce que vous avez accomplis, bravo!"
+                                }   else    {
+                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Vous avez perdu ${poids_per_challenge} voire plus. Vous avez réussi le challenge, vous pouvez être fier de vous pour ce que vous avez accomplis, bravo!"
+                                }
                         }   else if (poids_float > poids_deb)    {
                                     poids_obt = poids_float - poids_deb
                                     println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_obt} en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
