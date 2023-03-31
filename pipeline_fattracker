@@ -21,7 +21,7 @@ pipeline{
         
     }
     stages {
-        stage('[EPIC] Surveillance de l'alimentation') {
+        stage('[EPIC] Surveillance de l\'alimentation') {
              //Définition des variables
                     
         def nom = "${params.NOM}"
@@ -110,7 +110,7 @@ pipeline{
             }
         }
 
-        stage('[EPIC] Partie de création d'un programme d'alimentation') {
+        stage('[EPIC] Partie de création d'un programme d\'alimentation') {
             steps {
                 script {                    
                     
@@ -156,7 +156,7 @@ pipeline{
                 }
             }
         }
-        stage('[EPIC] Base de données de recette d'aliment et nutriment') {
+        stage('[EPIC] Base de données de recette d\'aliment et nutriment') {
             steps {
                 script {
                     //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
@@ -175,7 +175,7 @@ pipeline{
                 }
             }
         }
-         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l'utilisateur') {
+         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l\'utilisateur') {
             steps {
                 script {
                     // Début du challenge
