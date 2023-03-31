@@ -20,9 +20,7 @@ pipeline{
         string(name: 'EMAIL', description: 'Entrez votre email')
         
     }
-    stages {
-        stage('[EPIC] Surveillance de l\'alimentation') {
-             //Définition des variables
+     //Définition des variables
                     
         def nom = "${params.NOM}"
         def prenom = "${params.PRENOM}"
@@ -50,6 +48,8 @@ pipeline{
 
         def calcul = 0
 
+    stages {
+        stage('[EPIC] Surveillance de l\'alimentation') {
             steps {
                 script {
                     
