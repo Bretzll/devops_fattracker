@@ -169,7 +169,7 @@ pipeline{
                     val_lip_gr_re_max = val_lip_gr_re + 5
                     val_glu_gr_re_max = val_glu_gr_re + 5
                     
-                    echo "Vous avez besoin de ${val_pro_gr_re} grammes de protéines, ${val_lip_gr_re} grammes de lipides et ${val_glu_gr_re} grammes de glucides par jour."
+                    echo "Vous avez besoin de ${val_pro_gr_re} grammes de protéines, ${val_lip_gr_re} grammes de lipides et ${val_glu_gr_re} grammes de glucides par repas."
                     
                     
                 }
