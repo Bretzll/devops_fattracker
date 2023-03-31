@@ -20,7 +20,7 @@ pipeline{
         string(name: 'EMAIL', description: 'Entrez votre email')
     }
     stages {
-        stage('Build') {
+        stage('[EPIC] Surveillance de l'alimentation') {
             steps {
                 script {
                     
@@ -91,9 +91,9 @@ pipeline{
                         
                     // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
                     
-                    bl_ps = powerFunction(poids_float, 0.48)
-                    bl_tl = powerFunction(taille_float, 0.5)
-                    bl_age = powerFunction(age_int, -0.13)
+                        bl_ps = powerFunction(poids_float, 0.48)
+                        bl_tl = powerFunction(taille_float, 0.5)
+                        bl_age = powerFunction(age_int, -0.13)
                     
                     }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
                         calcul = (1.083 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
@@ -102,9 +102,16 @@ pipeline{
                     }
                     echo "Bonjour ${prenom} ${nom},"
                     echo "Votre total calorique est de ${calcul} calories par jour."
+                }
+            }
+        }
+
+        stage('[EPIC] Partie de création d'un programme d'alimentation') {
+            steps {
+                script {                    
                     
                     // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
-                    
+
                     calcul_perteglo = 7700 * perte_float
                     calcul_pertehebdo = calcul - (calcul_perteglo / 7)
                     echo "Pour perdre ${perte} kg par semaine, vous devrez consommer ${calcul_pertehebdo} calories par jour."
@@ -114,7 +121,7 @@ pipeline{
                     nbre_cal_re = calcul_pertehebdo/nbre_re_int 
                     
                     //Calcul des apports protéiques, glucidiques et lipidiques nécessaires par jour
-                    
+
                     if (act == 'Sédentaire')    {
                         val_pro = 0.8
                     }   else if (act == 'Activité légère')  {
@@ -141,6 +148,13 @@ pipeline{
                     
                     echo "Vous avez besoin de ${val_pro_gr_re} grammes de protéines, ${val_lip_gr_re} grammes de lipides et ${val_glu_gr_re} grammes de glucides par jour."
                     
+                    
+                }
+            }
+        }
+        stage('[EPIC] Base de données de recette d'aliment et nutriment') {
+            steps {
+                script {
                     //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
                     
                     def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
@@ -154,7 +168,12 @@ pipeline{
                     echo "Vous pouvez manger ces plats-ci à chaque repas : "
                     println(repas_parse.title)
                     jsonSlurper = null
-                    
+                }
+            }
+        }
+         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l'utilisateur') {
+            steps {
+                script {
                     // Début du challenge
                     
                     try {
