@@ -213,7 +213,7 @@ pipeline{
                         poids_per = poids_deb - poids_float
                         poids_obt = poids_float - poids_deb
                         
-                        echo "${poids_per}, ${poids_per_challenge}, ${reste}, ${poids_obt}" 
+                        echo "${poids_per}, ${poids_per_challenge}, ${reste}, ${poids_obt}, ${poids_float}" 
                         
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
