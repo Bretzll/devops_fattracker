@@ -213,12 +213,14 @@ pipeline{
                         poids_per = poids_deb - poids_float
                         poids_obt = poids_float - poids_deb
                         
+                        echo "${poids_per}, ${poids_per_challenge}, ${reste}, ${poids_obt}" 
+                        
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
                         if (reste > 0 && poids_per > 0 && poids_per < poids_per_challenge)  {   // Poids perdu avant fin du challenge mais obj pas atteint et challenge pas fini
                             poids_rest = poids_per_challenge - poids_per
                             println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez perdu : ${poids_per}. Il vous reste encore ${poids_rest} kg à perdre. Vous pouvez le faire!"                                                    
-                        }   else if (reste > 0 && poids_per == poids_float)     {   // Poids maintenu mais challenge pas fini
+                        }   else if (reste > 0 && Integer poids_per == Integer poids_float)     {   // Poids maintenu mais challenge pas fini
                             println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous n'avez ni perdu ni gagner de poids, il vous reste donc toujours ${poids_per_challenge} kg à perdre. Vous pouvez le faire!"                                    
                         }   else if (reste > 0 && poids_obt > 0)       {    // Poids augmenté mais challenge pas fini
                             println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez gagné ${poids_obt}. Vous avez gagné du poids, mais nous croyons en vous. Faites de votre mieux! (Rappel du poids à atteindre : ${poids_a_perdre})"                                                    
