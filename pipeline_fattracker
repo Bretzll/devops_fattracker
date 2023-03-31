@@ -182,6 +182,12 @@ pipeline{
                         
                         def date_debut = bat(script: date_scr, returnStdout: true)
                         def date_deb = new SimpleDateFormat("yyy-MM-dd").parse(date_debut)
+                                                
+                        // Calcul du temps écoulé en jours depuis le début du challenge
+
+                        def duration = date - date_deb
+                        duration as Integer
+                        Integer reste = duration - 90
                         
                         // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
                         
@@ -190,37 +196,47 @@ pipeline{
                         @echo off
                         mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
                         """
-                        
+
                         // Parsing du poids en format Double (le Stdout retourne un résultat en string)
-                        
+
                         def poids_debut = bat(script: poids_scr, returnStdout: true)
                         def poids_deb = Double.valueOf(poids_debut)
-                        
-                        // Calcul du temps écoulé en jours depuis le début du challenge
-                        
-                        def duration = date - date_deb
-                        duration as Integer
-                        Integer reste = duration - 90
-                        
+
+                        //Calcul du poids à perdre sur la durée du challenge
+
                         poids_per_jours = perte_float / 7
-                        poids_per_challenge = poids_per_jours * reste
+                        poids_per_challenge = poids_per_jours * 90
+                        poids_a_perdre = poids_deb - poids_per_challenge 
+                        
+                        // Calcul du poids perdu ou obtenu depuis le début du challenge
+
+                        Float poids_per = poids_deb - poids_float
+                        Float poids_obt = poids_float - poids_deb
                         
                         // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
                         
-                        if (poids_float < poids_deb)  {
-                                poids_per = poids_deb - poids_float
-                                if (poids_per < poids_per_challenge)    {
-                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Vous avez perdu moins de ${poids_per_challenge}. Vous n'avez pas réussi le challenge, mais vous pouvez cependant être fier de vous pour ce que vous avez accomplis, bravo!"
-                                }   else    {
-                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez perdu ${poids_per} en ${duration} jours. Vous avez perdu ${poids_per_challenge} voire plus. Vous avez réussi le challenge, vous pouvez être fier de vous pour ce que vous avez accomplis, bravo!"
-                                }
-                        }   else if (poids_float > poids_deb)    {
-                                    poids_obt = poids_float - poids_deb
-                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous avez gagné ${poids_obt} en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
-                        }   else    {
-                                    println "Bonjour ${prenom} ${nom}. Vous avez commencé votre challenge le ${date_deb} et pesiez ${poids_deb}. Aujourd'hui nous sommes le ${cur_date} et vous pesez ${poids_float}. Vous n'avez ni gagné ni perdu de poids en ${duration} jours. Vous pouvez le faire, nous croyons en vous!"
-                                                        
+                        if (reste > 0 && poids_per > 0 && poids_per < poids_per_challenge)  {   // Poids perdu avant fin du challenge mais obj pas atteint et challenge pas fini
+                            poids_rest = poids_per_challenge - poids_per
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez perdu : ${poids_per}. Il vous reste encore ${poids_rest} kg à perdre. Vous pouvez le faire!"                                                    
+                        }   else if (reste > 0 && poids_per == poids_float)     {   // Poids maintenu mais challenge pas fini
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous n'avez ni perdu ni gagner de poids, il vous reste donc toujours ${poids_per_challenge} kg à perdre. Vous pouvez le faire!"                                    
+                        }   else if (reste > 0 && poids_obt > 0)       {    // Poids augmenté mais challenge pas fini
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez gagné ${poids_obt}. Vous avez gagné du poids, mais nous croyons en vous. Faites de votre mieux! (Rappel du poids à atteindre : ${poids_a_perdre})"                                                    
+                        }   else if (reste > 0 && poids_per >= poids_per_challenge)     {   // Poids perdu avant fin du challenge et obj atteint avant la fin
+                            println "Vous avez atteint votre poids cible avant la fin du challenge! Bravo, vous pouvez être fier de vous!"
+                        }   else if (reste == 0 && poids_per >= poids_per_challenge)    {   // Challenge terminé et poids cible atteint
+                            println "Vous avez atteint votre poids cible à la fin du challenge! Bravo, vous pouvez être fier de vous!"
+                        }   else if (reste == 0 && poids_per > 0 && poids_per < poids_per_challenge)    {   // Challenge terminé et poids cible non atteint mais perte de poids
+                            poids_rest = poids_per_challenge - poids_per                            
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, mais vous avez perdu ${poids_rest}, vous pouvez tout de même être fier de vous!"
+                        }   else if (reste == 0 && poids_per == 0)      {   // Challenge terminé et poids cible non atteint, poids maintenu
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, et êtes toujours à ${poids_float} kg. Vous pouvez toujours recommencer le challenge, nous croyons en vous, vous y arriverez!"
+                        }   else if (reste == 0 && poids_obt > 0 )      {   // Challenge terminé et poids cible non atteint, poids gagné
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, et avez gagné ${poids_obt} kg. Vous pouvez toujours recommencer le challenge, nous croyons en vous, vous y arriverez!"
                         }
+
+                        
+                        }                    
                     }
                 }
             }
