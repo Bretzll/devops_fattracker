@@ -110,7 +110,7 @@ pipeline{
             }
         }
 
-        stage('[EPIC] Partie de création d'un programme d\'alimentation') {
+        stage('[EPIC] Partie de création d\'un programme d\'alimentation') {
             steps {
                 script {                    
                     
