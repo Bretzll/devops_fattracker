@@ -21,6 +21,8 @@ pipeline{
         string(name: 'POIDS', description: 'Entrez votre poids')
         string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
         choice(name: 'ACTIVITE', choices: ['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
+        choice(name: 'NOURRITURE', choices: ['Oui', 'Non'], description: 'Mangez vous régulièrement de la Junk Food? (Plus de 4 fois par semaine)')
+        choice(name: 'EAU', choices: ['Oui', 'Non'], description: 'Buvez vous suffisament d'eau? (Minimum par jour : 2.5L)')
         choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
         choice(name: 'NBRE_RE', choices: ['1', '2', '3', '4'], description: 'Choisissez le nombre de repas que vous voulez manger par jour')
         string(name: 'EMAIL', description: 'Entrez votre email')
@@ -40,7 +42,8 @@ pipeline{
                     def sexe = "${params.SEXE}"
                     def act = "${params.ACTIVITE}"
                     def email = "${params.EMAIL}"
-        
+                    def eau = "${params.EAU}"
+                    
                     def age = "${params.AGE}"
                     int age_int = age as Integer
         
@@ -109,6 +112,12 @@ pipeline{
                     }
                     echo "Bonjour ${prenom} ${nom},"
                     echo "Votre total calorique est de ${calcul} calories par jour."
+                    if (eau == 'Non')   {
+                        echo "Voici ce qui se passe dans votre corps lorsque vous ne vous hydratez pas assez : https://www.marieclaire.fr/ce-qu-il-se-passe-dans-le-corps-quand-on-ne-boit-pas-assez-d-eau,1421810.asp. Dorénavant, nous vous enverrons une notification pour vous aider à vous hydrater correctement."
+                        bat"""
+                        msg %USERNAME% Pensez à vous hydrater!
+                        """
+                    }
                 }
             }
         }
@@ -169,11 +178,24 @@ pipeline{
         stage('[EPIC] Base de données de recette d\'aliment et nutriment') {
             steps {
                 script {
-                    //Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
+                    
+                    // Déclaration des variables
+                    
+                    def junk = "${params.NOURRITURE}"
+                    
+                    // Demande de consommation de junk food et, si oui, partage d'un article
+                    
+                    if (junk == 'Oui')  {
+                        echo "Voici un article qui pourrait vous faire changer d'avis : https://www.lemonde.fr/idees/article/2010/03/30/la-junk-food-une-drogue-comme-les-autres-par-catherine-vincent_1326268_3232.html"
+                    }
+                    
+                    echo "Voici des exemples de repas que vous pourriez manger, qui vous permettrait de perdre du poids sans pour autant vous priver :"
+                    
+                    // Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
                     
                     def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
                     
-                    //Parsing et affichage du résutlat en JSON (utilisation du @NonCPS pour éviter les problèmes de serialization)
+                    // Parsing et affichage du résutlat en JSON (utilisation du @NonCPS pour éviter les problèmes de serialization)
                     
                     def rep = response.content
                     @NonCPS
