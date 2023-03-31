@@ -6,6 +6,10 @@ import groovy.sql.Sql
 import groovy.time.TimeCategory
 
 def calcul = 0
+def nbre_cal_re = 0
+def val_pro_gr_re = 0
+def val_lip_gr_re = 0
+def val_glu_gr_re = 0
 
 pipeline{
     agent any
@@ -116,7 +120,10 @@ pipeline{
                     // Définition des variables
                     
                     def act = "${params.ACTIVITE}"
-
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
                     // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
 
                     calcul_perteglo = 7700 * perte_float
@@ -181,6 +188,33 @@ pipeline{
          stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l\'utilisateur') {
             steps {
                 script {
+                
+                    // Définition des variables
+                    
+                    def nom = "${params.NOM}"
+                    def prenom = "${params.PRENOM}"
+                    def sexe = "${params.SEXE}"
+                    def act = "${params.ACTIVITE}"
+                    def email = "${params.EMAIL}"
+        
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
+        
+                    def taille = "${params.TAILLE}"
+                    taille_float = Double.valueOf(taille)
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
+                    def perte = "${params.PERTE}"
+                    perte_float = Double.valueOf(perte)
+                    
+                    def nbre_re = "${params.NBRE_RE}"
+                    nbre_re_int = Double.valueOf(nbre_re)
+        
+                    def date = new Date()
+                    def cur_date = date.format('YYYY-MM-dd')
+                
                     // Début du challenge
                     
                     try {
