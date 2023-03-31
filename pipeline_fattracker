@@ -113,6 +113,10 @@ pipeline{
             steps {
                 script {                    
                     
+                    // Définition des variables
+                    
+                    def act = "${params.ACTIVITE}"
+
                     // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
 
                     calcul_perteglo = 7700 * perte_float
