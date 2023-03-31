@@ -234,7 +234,6 @@ pipeline{
                         }   else if (reste == 0 && poids_obt > 0 )      {   // Challenge terminé et poids cible non atteint, poids gagné
                             println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, et avez gagné ${poids_obt} kg. Vous pouvez toujours recommencer le challenge, nous croyons en vous, vous y arriverez!"
                         }
-
                         
                         }                    
                     }
