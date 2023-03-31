@@ -187,7 +187,7 @@ pipeline{
 
                         def duration = date - date_deb
                         duration as Integer
-                        Integer reste = duration - 90
+                        Integer reste = 90 - duration
                         
                         // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
                         
