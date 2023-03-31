@@ -22,7 +22,7 @@ pipeline{
         string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
         choice(name: 'ACTIVITE', choices: ['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
         choice(name: 'NOURRITURE', choices: ['Oui', 'Non'], description: 'Mangez vous régulièrement de la Junk Food? (Plus de 4 fois par semaine)')
-        choice(name: 'EAU', choices: ['Oui', 'Non'], description: 'Buvez vous suffisament d'eau? (Minimum par jour : 2.5L)')
+        choice(name: 'EAU', choices: ['Oui', 'Non'], description: 'Buvez vous suffisament d\'eau? (Minimum par jour : 2.5L)')
         choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
         choice(name: 'NBRE_RE', choices: ['1', '2', '3', '4'], description: 'Choisissez le nombre de repas que vous voulez manger par jour')
         string(name: 'EMAIL', description: 'Entrez votre email')
