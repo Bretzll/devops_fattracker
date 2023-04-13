@@ -1,23 +1,328 @@
-# Gradle
-# Build your Java project and run tests with Gradle using a Gradle wrapper script.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+import java.text.SimpleDateFormat
+import java.lang.Math
+import groovy.json.*
+import java.math.BigDecimal
+import groovy.sql.Sql
+import groovy.time.TimeCategory
 
-trigger:
-- main
+def calcul = 0
+def nbre_cal_re = 0
+def val_pro_gr_re = 0
+def val_lip_gr_re = 0
+def val_glu_gr_re = 0
 
-pool:
-  vmImage: ubuntu-latest
+pipeline{
+    agent any
+    parameters {
+        string(name: 'NOM', description: 'Entrez votre nom')
+        string(name: 'PRENOM', description: 'Entrez votre prénom')
+        string(name: 'AGE', description: 'Entrez votre âge')
+        choice(name: 'SEXE', choices: ['Homme', 'Femme'], description: 'Choisir votre sexe')
+        string(name: 'POIDS', description: 'Entrez votre poids')
+        string(name: 'TAILLE', description: 'Entrez votre taille en mètre')
+        choice(name: 'ACTIVITE', choices: ['Sédentaire', 'Activité légère', 'Activité modérée', 'Activité intense'], description: 'Choisissez votre activité sportive : Sédentaire : aucune activité sportive   Activité légère : 1 à 3 entraînements par semaine   Activité modérée : 4 à 6 entraînements par semaine   Activité intense = + de 6 entraînements par semaine.')
+        choice(name: 'NOURRITURE', choices: ['Oui', 'Non'], description: 'Mangez vous régulièrement de la Junk Food? (Plus de 4 fois par semaine)')
+        choice(name: 'EAU', choices: ['Oui', 'Non'], description: 'Buvez vous suffisament d\'eau? (Minimum par jour : 2.5L)')
+        choice(name: 'PERTE', choices: ['0.1', '0.2', '0.3', '0.4', '0.5'], description: 'Choisissez la masse que vous voulez perdre par semaine (100 grammes, 200 grammes, 300 grammes, 400 grammes ou 500 grammes. Une valeur au dessus de 500 grammes serait dangereuse pour le corps.)')
+        choice(name: 'NBRE_RE', choices: ['1', '2', '3', '4'], description: 'Choisissez le nombre de repas que vous voulez manger par jour')
+        string(name: 'EMAIL', description: 'Entrez votre email')
+        
+    }
+    stages {
+        stage('[EPIC] Surveillance de l\'alimentation') {
+            steps {
+                script {
+                    
+                    echo "Building [EPIC] Surveillance de l'alimentation"
+                    
+                     //Définition des variables
+                    
+                    def nom = "${params.NOM}"
+                    def prenom = "${params.PRENOM}"
+                    def sexe = "${params.SEXE}"
+                    def act = "${params.ACTIVITE}"
+                    def email = "${params.EMAIL}"
+                    def eau = "${params.EAU}"
+                    
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
+        
+                    def taille = "${params.TAILLE}"
+                    taille_float = Double.valueOf(taille)
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
+                    def perte = "${params.PERTE}"
+                    perte_float = Double.valueOf(perte)
+                    
+                    def nbre_re = "${params.NBRE_RE}"
+                    nbre_re_int = Double.valueOf(nbre_re)
+        
+                    def date = new Date()
+                    def cur_date = date.format('YYYY-MM-dd')
 
-steps:
-- task: Gradle@2
-  inputs:
-    workingDirectory: ''
-    gradleWrapperFile: 'gradlew'
-    gradleOptions: '-Xmx3072m'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.8'
-    jdkArchitectureOption: 'x64'
-    publishJUnitResults: true
-    testResultsFiles: '**/TEST-*.xml'
-    tasks: 'build'
+                    //Calcul et affichage de l'IMC 
+                    
+                    imc = poids_float / (taille_float*taille_float)
+                    
+                    if (imc < 18.5) {
+                        echo "Vous êtes en insuffisance pondérale et avez un imc de ${imc}."
+                    }   else if (imc > 18.5 && imc < 25)  {
+                        echo "Vous avez une corpulence normale et avez un imc de ${imc}."
+                    }   else if (imc > 25 && imc < 30)    {
+                        echo "Vous êtes en surpoids et avez un imc de ${imc}."
+                    }   else if (imc > 30 && imc < 35)    {
+                        echo "Vous êtes en obésité modérée et avez un imc de ${imc}."
+                    }   else if (imc > 35 && imc < 40)    {
+                        echo "Vous êtes en obésité sévère et avez un imc de ${imc}."
+                    }   else
+                        echo "Vous êtes en obésité morbide et avez un imc de ${imc}."
+                    
+                    //Début du calcul du besoin calorique 
+                    def val_act = 0
+                    
+                    if (act == 'Sédentaire')    {
+                        val_act = 1.375
+                    }   else if (act == 'Activité légère')  {
+                        val_act = 1.56
+                    }   else if (act == 'Activité modérée')  {
+                        val_act = 1.64
+                    }   else    {
+                        val_act = 1.82
+                    }
+                    
+                    // Formule de Harris revue par Roza et Shizgall
+                    
+                    if (sexe == 'Homme' && age_int < 60 || imc < 30)    {
+                        calcul = ((13.707 * poids_float) + (492.3 * taille_float) - (6.673 * age_int) + 77.607) * val_act 
+                    }   else if (sexe == 'Femme' && age < 60 || imc < 30)   {
+                        calcul = ((9.74 * poids_float) + (172.9 * taille_float) - (4.737 * age_int) + 667.51) * val_act
+                        
+                    // Formule de Black et al (pour les personnes en obésité ou agées de 60 ans ou plus)
+                    
+                        bl_ps = powerFunction(poids_float, 0.48)
+                        bl_tl = powerFunction(taille_float, 0.5)
+                        bl_age = powerFunction(age_int, -0.13)
+                    
+                    }   else if (sexe == 'Homme' && age_int > 60 || imc > 30)  {
+                        calcul = (1.083 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
+                    }   else    {
+                        calcul = (0.963 * bl_ps * bl_tl * bl_age) * (10000 / 4.1855)
+                    }
+                    echo "Bonjour ${prenom} ${nom},"
+                    echo "Votre total calorique est de ${calcul} calories par jour."
+                    if (eau == 'Non')   {
+                        echo "Voici ce qui se passe dans votre corps lorsque vous ne vous hydratez pas assez : https://www.marieclaire.fr/ce-qu-il-se-passe-dans-le-corps-quand-on-ne-boit-pas-assez-d-eau,1421810.asp. Dorénavant, nous vous enverrons une notification pour vous aider à vous hydrater correctement."
+                        bat"""
+                        timeout /t 10
+                        msg * Pensez à vous hydrater!
+                        """
+                    }
+                }
+            }
+        }
+
+        stage('[EPIC] Partie de création d\'un programme d\'alimentation') {
+            steps {
+                script {                    
+                    
+                    // Définition des variables
+                    
+                    def act = "${params.ACTIVITE}"
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
+                    // Calcul du nombres de calories à consommer pour perdre la valeur donnée dans la variable "perte" en masse par semaine
+
+                    calcul_perteglo = 7700 * perte_float
+                    calcul_pertehebdo = calcul - (calcul_perteglo / 7)
+                    echo "Pour perdre ${perte} kg par semaine, vous devrez consommer ${calcul_pertehebdo} calories par jour."
+                    
+                    //Calcul du nombre de calories par repas pour un résultat précis concernant les repas disponibles
+                    
+                    nbre_cal_re = calcul_pertehebdo/nbre_re_int 
+                    
+                    //Calcul des apports protéiques, glucidiques et lipidiques nécessaires par jour
+
+                    if (act == 'Sédentaire')    {
+                        val_pro = 0.8
+                    }   else if (act == 'Activité légère')  {
+                        val_pro = 1.2
+                    }   else if (act == 'Activité modérée')  {
+                        val_pro = 1.6
+                    }   else    {
+                        val_pro = 2
+                    }
+                    
+                    val_pro_gr = poids_float * val_pro
+                    val_lip_gr = (poids_float)
+                    val_glu_gr = (calcul_pertehebdo - ((val_pro_gr * 4) + (val_lip_gr * 9))) / 4
+                                       
+                    echo "Vous avez besoin de ${val_pro_gr} grammes de protéines, ${val_lip_gr} grammes de lipides et ${val_glu_gr} grammes de glucides par jour."
+                                        
+                    val_pro_gr_re = val_pro_gr / nbre_re_int
+                    val_lip_gr_re = val_lip_gr / nbre_re_int
+                    val_glu_gr_re = val_glu_gr / nbre_re_int
+
+                    val_pro_gr_re_max = val_pro_gr_re + 5
+                    val_lip_gr_re_max = val_lip_gr_re + 5
+                    val_glu_gr_re_max = val_glu_gr_re + 5
+                    
+                    echo "Vous avez besoin de ${val_pro_gr_re} grammes de protéines, ${val_lip_gr_re} grammes de lipides et ${val_glu_gr_re} grammes de glucides par repas."
+                    
+                    
+                }
+            }
+        }
+        stage('[EPIC] Base de données de recette d\'aliment et nutriment') {
+            steps {
+                script {
+                    
+                    // Déclaration des variables
+                    
+                    def junk = "${params.NOURRITURE}"
+                    
+                    // Demande de consommation de junk food et, si oui, partage d'un article
+                    
+                    if (junk == 'Oui')  {
+                        echo "Voici un article qui pourrait vous faire changer d'avis : https://www.lemonde.fr/idees/article/2010/03/30/la-junk-food-une-drogue-comme-les-autres-par-catherine-vincent_1326268_3232.html"
+                    }
+                    
+                    echo "Voici des exemples de repas que vous pourriez manger, qui vous permettrait de perdre du poids sans pour autant vous priver :"
+                    
+                    // Requête pour récupérer des exemples de plats compatibles avec le total de calories, protéines, glucides et lipides max par repas 
+                    
+                    def response = httpRequest "https://api.spoonacular.com/recipes/findByNutrients?apiKey=de54e436479d412991dafdd39eeef448&maxCalories=${nbre_cal_re}&maxCarbs=${val_glu_gr_re_max}&maxProtein=${val_pro_gr_re_max}&maxFat=${val_lip_gr_re_max}"
+                    
+                    // Parsing et affichage du résutlat en JSON (utilisation du @NonCPS pour éviter les problèmes de serialization)
+                    
+                    def rep = response.content
+                    @NonCPS
+                    def jsonSlurper = new groovy.json.JsonSlurperClassic()
+                    repas_parse = jsonSlurper.parseText(rep)
+                    echo "Vous pouvez manger ces plats-ci à chaque repas : "
+                    println(repas_parse.title)
+                    jsonSlurper = null
+                }
+            }
+        }
+         stage('[EPIC] Challenge : un challenge personnalisé, sur demande de l\'utilisateur') {
+            steps {
+                script {
+                
+                    // Définition des variables
+                    
+                    def nom = "${params.NOM}"
+                    def prenom = "${params.PRENOM}"
+                    def sexe = "${params.SEXE}"
+                    def act = "${params.ACTIVITE}"
+                    def email = "${params.EMAIL}"
+        
+                    def age = "${params.AGE}"
+                    int age_int = age as Integer
+        
+                    def taille = "${params.TAILLE}"
+                    taille_float = Double.valueOf(taille)
+                    
+                    def poids = "${params.POIDS}"
+                    poids_float = Double.valueOf(poids)
+                    
+                    def perte = "${params.PERTE}"
+                    perte_float = Double.valueOf(perte)
+                    
+                    def nbre_re = "${params.NBRE_RE}"
+                    nbre_re_int = Double.valueOf(nbre_re)
+        
+                    def date = new Date()
+                    def cur_date = date.format('YYYY-MM-dd')
+                
+                    // Début du challenge
+                    
+                    try {
+                        
+                        // Requête SQL pour insérer les données dans la base de données (si ces dernières ne l'ont pas déjà été)
+                        
+                        bat """
+                        @echo off
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "insert into user (nom, prenom, date_debut, poids_debut, age, email) values ('${nom}', '${prenom}', '${cur_date}', ${poids_float}, ${age_int}, '${email}');"
+                        """
+                        
+                        // Définition d'une exception au cas où les données ont déjà été rentrées, permettant ainsi d'afficher les données rentrées au début du challenge
+                        
+                    } catch (Exception e) {                        
+                        
+                        // Requête SQL permettant de retrouver la date de début du challenge pour la personne en fonction de son nom, prénom et adresse mail (les trois sont associés pour éviter des duplicatas dans la base de données)
+                        
+                        def date_scr =
+                        """
+                        @echo off
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select date_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
+                        """
+                        
+                        // Parsing de la date en format date (le Stdout retourne un résultat en string)
+                        
+                        def date_debut = bat(script: date_scr, returnStdout: true)
+                        def date_deb = new SimpleDateFormat("yyy-MM-dd").parse(date_debut)
+                                                
+                        // Calcul du temps écoulé en jours depuis le début du challenge
+
+                        def duration = date - date_deb
+                        duration as Integer
+                        Integer reste = 90 - duration
+                        
+                        // Requête SQL permettant de retrouver le poids auquel la personne à commencé le challenge
+                        
+                        def poids_scr = 
+                        """
+                        @echo off
+                        mysql -N -u root -proot -h 127.0.0.1 fattracker -e "select poids_debut from user where nom = '${nom}' and prenom = '${prenom}' and email = '${email}';"
+                        """
+
+                        // Parsing du poids en format Double (le Stdout retourne un résultat en string)
+
+                        def poids_debut = bat(script: poids_scr, returnStdout: true)
+                        def poids_deb = Double.valueOf(poids_debut)
+
+                        //Calcul du poids à perdre sur la durée du challenge
+
+                        poids_per_jours = perte_float / 7
+                        poids_per_challenge = poids_per_jours * 90
+                        poids_a_perdre = poids_deb - poids_per_challenge 
+                        
+                        // Calcul du poids perdu ou obtenu depuis le début du challenge
+
+                        poids_per = poids_deb - poids_float
+                        poids_obt = poids_float - poids_deb
+                        
+                        echo "${poids_per}, ${poids_per_challenge}, ${reste}, ${poids_obt}, ${poids_float}" 
+                        
+                        // Définition du message à afficher en fonction de la perte/prise/du maintient en poids de la personne
+                        
+                        if (reste > 0 && poids_per > 0 && poids_per < poids_per_challenge)  {   // Poids perdu avant fin du challenge mais obj pas atteint et challenge pas fini
+                            poids_rest = poids_per_challenge - poids_per
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez perdu : ${poids_per}. Il vous reste encore ${poids_rest} kg à perdre. Vous pouvez le faire!"                                                    
+                        }   else if (reste > 0 && poids_per == 0)     {   // Poids maintenu mais challenge pas fini
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous n'avez ni perdu ni gagné de poids, il vous reste donc toujours ${poids_per_challenge} kg à perdre. Vous pouvez le faire!"                                    
+                        }   else if (reste > 0 && poids_obt > 0)       {    // Poids augmenté mais challenge pas fini
+                            println "Rappel : votre challenge n'est pas fini! Il vous reste encore ${reste} jours pour perdre ${poids_per_challenge} kg, ne lâchez rien! Vous avez gagné ${poids_obt}. Vous avez gagné du poids, mais nous croyons en vous. Faites de votre mieux! (Rappel du poids à atteindre : ${poids_a_perdre})"                                                    
+                        }   else if (reste > 0 && poids_per >= poids_per_challenge)     {   // Poids perdu avant fin du challenge et obj atteint avant la fin
+                            println "Vous avez atteint votre poids cible avant la fin du challenge! Bravo, vous pouvez être fier de vous!"
+                        }   else if (reste == 0 && poids_per >= poids_per_challenge)    {   // Challenge terminé et poids cible atteint
+                            println "Vous avez atteint votre poids cible à la fin du challenge! Bravo, vous pouvez être fier de vous!"
+                        }   else if (reste == 0 && poids_per > 0 && poids_per < poids_per_challenge)    {   // Challenge terminé et poids cible non atteint mais perte de poids
+                            poids_rest = poids_per_challenge - poids_per                            
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, mais vous avez perdu ${poids_rest}, vous pouvez tout de même être fier de vous!"
+                        }   else if (reste == 0 && poids_per == 0)      {   // Challenge terminé et poids cible non atteint, poids maintenu
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, et êtes toujours à ${poids_float} kg. Vous pouvez toujours recommencer le challenge, nous croyons en vous, vous y arriverez!"
+                        }   else if (reste == 0 && poids_obt > 0 )      {   // Challenge terminé et poids cible non atteint, poids gagné
+                            println "Vous n'avez pas atteint votre poids cible avant la fin du challenge, et avez gagné ${poids_obt} kg. Vous pouvez toujours recommencer le challenge, nous croyons en vous, vous y arriverez!"
+                        }
+                        
+                        }                    
+                    }
+                }
+            }
+        }
+    }
