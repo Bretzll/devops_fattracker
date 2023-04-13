@@ -115,7 +115,6 @@ pipeline{
                     if (eau == 'Non')   {
                         echo "Voici ce qui se passe dans votre corps lorsque vous ne vous hydratez pas assez : https://www.marieclaire.fr/ce-qu-il-se-passe-dans-le-corps-quand-on-ne-boit-pas-assez-d-eau,1421810.asp. Dorénavant, nous vous enverrons une notification pour vous aider à vous hydrater correctement."
                         bat"""
-                        timeout /t 10
                         msg * Pensez à vous hydrater!
                         """
                     }
